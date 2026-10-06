@@ -10,7 +10,6 @@ import { registerRoutes } from "./routes/v1/index";
 import { HttpException } from "./exceptions/v1/HttpException";
 import { HTTP_STATUS } from "./utils/v1/constants";
 import { openApiSpec } from "./openapi/spec";
-import taskRoutes from "./routes/taskRoutes";
 
 const app: Application = express();
 
@@ -76,9 +75,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
 // Register V1 API Routes
 registerRoutes(app);
-
-// Legacy routes support for backward compatibility
-app.use("/api/tasks", taskRoutes);
 
 // 404 Not Found Handler
 app.use((req: Request, res: Response) => {
