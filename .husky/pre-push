@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+echo "🚀 Running pre-push checks..."
+
+# 1. Full TypeScript compilation verification
+echo "📦 Verifying full TypeScript build..."
+npm run build
+
+# 2. Full codebase linting (all files, not just staged)
+echo "🔍 Running full project lint verification..."
+npm run lint
+
+echo "✅ All pre-push checks passed! Proceeding with push."

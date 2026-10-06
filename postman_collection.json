@@ -1,0 +1,279 @@
+{
+  "info": {
+    "_postman_id": "e2a1b3c4-5d6e-4f7a-8b9c-123456789abc",
+    "name": "Express Enterprise CRUD REST API",
+    "description": "Comprehensive Postman collection for Express CRUD REST API featuring Create, Read All, Read by ID, Update, Delete, Validation, and Error Handling following the reference enterprise architecture.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "itemId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System & Health",
+      "item": [
+        {
+          "name": "Root - Service Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/generic/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "generic", "health"]
+            }
+          }
+        },
+        {
+          "name": "Get Constants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/generic/constants",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "generic", "constants"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CRUD - Items",
+      "item": [
+        {
+          "name": "1. Create Item (POST)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('itemId', res.data.id);",
+                  "    console.log('Saved itemId:', res.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dell UltraSharp 32 4K Monitor\",\n  \"description\": \"32-inch 4K UHD USB-C Hub Monitor with IPS Black technology\",\n  \"price\": 849.99,\n  \"quantity\": 25,\n  \"category\": \"Electronics\",\n  \"status\": \"Active\",\n  \"tags\": [\"monitor\", \"dell\", \"4k\", \"display\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items"]
+            }
+          }
+        },
+        {
+          "name": "2. Read All Items (GET)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.items && res.data.items.length > 0) {",
+                  "    pm.collectionVariables.set('itemId', res.data.items[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/items?page=1&limit=10&sortBy=createdAt&sortOrder=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                },
+                {
+                  "key": "search",
+                  "value": "Dell",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "Electronics",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "Active",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Read Item by ID (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items", "{{itemId}}"]
+            }
+          }
+        },
+        {
+          "name": "4. Update Item (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 799.99,\n  \"quantity\": 30,\n  \"description\": \"Updated: 32-inch 4K UHD USB-C Hub Monitor on seasonal discount\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items", "{{itemId}}"]
+            }
+          }
+        },
+        {
+          "name": "5. Delete Item (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/items/{{itemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items", "{{itemId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation & Error Handling",
+      "item": [
+        {
+          "name": "Validation Error - Missing required fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"X\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items"]
+            }
+          }
+        },
+        {
+          "name": "Validation Error - Invalid Category Enum",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Gaming Headset\",\n  \"description\": \"Wireless surround sound headset\",\n  \"price\": 120,\n  \"quantity\": 10,\n  \"category\": \"InvalidCategory\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/items",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items"]
+            }
+          }
+        },
+        {
+          "name": "Not Found Error - Nonexistent ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/items/non-existent-uuid-123",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "items", "non-existent-uuid-123"]
+            }
+          }
+        },
+        {
+          "name": "404 Error - Unknown Route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/unknown-endpoint",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "unknown-endpoint"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

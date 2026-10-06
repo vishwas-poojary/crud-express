@@ -1,0 +1,32 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "contentful",
+    "Contentful",
+    "cspell",
+    "Exelon",
+    "gitleaks",
+    "Gitleaks",
+    "hono",
+    "Hono",
+    "Logitech",
+    "MacBook",
+    "openapi",
+    "OpenAPI",
+    "pino",
+    "scalar",
+    "Scalar",
+    "semgrep",
+    "Semgrep",
+    "trivy",
+    "Trivy",
+    "UltraSharp"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    "package-lock.json",
+    ".git/**"
+  ]
+}
